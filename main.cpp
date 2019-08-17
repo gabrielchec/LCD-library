@@ -21,7 +21,7 @@ int main(void)
 {
 	LCD a;
 	while(1){
-		a.animate_line("Witaj piekny swiecie zalany lzami mojego zycia",2,500);
+		a.animate_line("This is short example.",2,500);
 	}
 
 }
