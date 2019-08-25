@@ -18,6 +18,8 @@ int main(void)
 	example.change_char(' ', 1, 4);
 	while(1){
 		example.animate_line((char*)"This is little example of using animate_line function",2);
+		example.animate_line((char*)"Other example",1);
+			_delay_ms(500);
 	}
 
 }

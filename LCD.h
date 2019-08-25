@@ -16,7 +16,7 @@
 class LCD{
 	int * RS, * RW, * E;
 	short line_1_pos = 0;
-	short line_2_pos = -16;
+	short line_2_pos = 0;
 	
 	void write_command(char character);
 	void write_display(char character);

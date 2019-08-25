@@ -47,36 +47,26 @@ int LCD::animate_line(char * word, short row ){
 	int size = 0;
 	while(*word){size++; word++; }
 	word -= size;
-	
-	if(row == 1){
-		set_position(1,1);
-		if(line_1_pos > 0){word+=line_1_pos;}
-		for(int i = 0; i < 16; i++){
-				write_display(' ');
-			}
-			else{
-				write_display(*word++);
-			}
-		}
-		line_1_pos++;
-		if(line_1_pos == size)		line_1_pos = -16;
-	}
-	else if(row == 2){
-		set_position(2,1);
-		if(line_2_pos > 0){word+=line_2_pos;}
-		for(int i = 0; i < 16; i++){
-			if(line_2_pos + i < 0 || !*word){
-				write_display(' ');
-			}
-			else{
-	 			write_display(*word++);
-			}
-		}
-		line_2_pos++;
+	int line_pos = 0;
+	if( row == 1){
+		 line_pos = line_1_pos++;
+		 if(line_1_pos == size)		line_1_pos = -16;
+		 }
+	else if( row == 2){
+		line_pos = line_2_pos++;
 		if(line_2_pos == size)		line_2_pos = -16;
 	}
-	else return -1;
-	_delay_ms(500);
+	set_position(row,1);
+	if(line_pos > 0){word += line_pos;}
+	
+	for(int i = 0; i < 16; i++){
+		if(line_pos + i < 0 || !*word){
+			write_display(' ');
+		}
+		else{
+			write_display(*word++);
+		}
+	}
 	return 0;
 }
 
