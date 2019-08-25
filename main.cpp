@@ -9,19 +9,15 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "LCD.h"
-#include <string.h>
-
-#define rs PB2			//0x04
-#define rw PB1			//0x02
-#define e PB0			//0x01
-#define data PD
 
 
 int main(void)
 {
-	LCD a;
+	LCD example;
+	example.write_line((char*)"Hi there",1);
+	example.change_char(' ', 1, 4);
 	while(1){
-		a.animate_line("This is short example.",2,500);
+		example.animate_line((char*)"This is little example of using animate_line function",2);
 	}
 
 }

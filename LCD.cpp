@@ -20,7 +20,7 @@ void LCD::write_command(char character){
 	PORTB = 0x00;
 	PORTD = character;
 	PORTB = 0x01;
-	_delay_ms(4.5);
+	_delay_ms(5);
 	PORTB = 0x00;
 }
 
@@ -28,7 +28,7 @@ void LCD::write_display(char character){
 	PORTB = 0x04;
 	PORTD = character;
 	PORTB = 0x05;
-	_delay_ms(4.5);
+	_delay_ms(5);
 	PORTB &= 0x04;
 }
 
@@ -43,24 +43,50 @@ int LCD::write_line(char *word, short row){
 	return 0;
 }
 
-int LCD::animate_line(char * word, short row, short ms_per_move ){
-	short i = 16;
+int LCD::animate_line(char * word, short row ){
+	int size = 0;
+	while(*word){size++; word++; }
+	word -= size;
 	
 	if(row == 1){
-		write_command( 0x80 );
-		word += line_1_pos;
-		while( *word && i ){ write_display( *word++ ); i--; }
-		if(i == 1)		line_1_pos = 0;	
+		set_position(1,1);
+		if(line_1_pos > 0){word+=line_1_pos;}
+		for(int i = 0; i < 16; i++){
+				write_display(' ');
+			}
+			else{
+				write_display(*word++);
+			}
+		}
 		line_1_pos++;
+		if(line_1_pos == size)		line_1_pos = -16;
 	}
 	else if(row == 2){
-		write_command( 0xC0 );
-		word += line_2_pos;
-		while( *word && i ){ write_display( *word++ ); i--; }
-		if(i == 1)		line_1_pos = 0;
+		set_position(2,1);
+		if(line_2_pos > 0){word+=line_2_pos;}
+		for(int i = 0; i < 16; i++){
+			if(line_2_pos + i < 0 || !*word){
+				write_display(' ');
+			}
+			else{
+	 			write_display(*word++);
+			}
+		}
 		line_2_pos++;
+		if(line_2_pos == size)		line_2_pos = -16;
 	}
 	else return -1;
 	_delay_ms(500);
 	return 0;
+}
+
+void LCD::change_char(char character, short row, short col){
+	set_position(row, col);
+	write_display(character);
+}
+
+void LCD::set_position(short row, short col){
+	if(row == 1) write_command(0x80);
+	else write_command(0xC0);
+	for(short i = 0; i < col - 1; i++)	write_command(0x14);
 }

@@ -11,20 +11,22 @@
 #define F_CPU 16000000L
 #include <util/delay.h>
 #include <avr/io.h>
-
+#include <string.h>
 
 class LCD{
 	int * RS, * RW, * E;
+	short line_1_pos = 0;
+	short line_2_pos = -16;
+	
 	void write_command(char character);
 	void write_display(char character);
-	short line_1_pos = 0;
-	short line_2_pos = 0;
+	void set_position(short row, short col);
 public:
 	LCD();
 	int write_line(char * word, short row);	
-	int animate_line(char * word, short row, short ms_per_move );
+	int animate_line(char * word, short row );
 	int animate_col(char **word, short speed);
-	int change_char(char character, short col, short row);
+	void change_char(char character, short row, short col);
 
 };
 
